@@ -7,9 +7,6 @@ const schema = a.schema({
     image: a.string(),
     price: a.float(),
     cartItems: a.hasMany('CartItem', 'productId')
-      .authorization((allow) => [
-        allow.group('ADMINS').to(['read']),        
-      ]),
   })
   .authorization((allow) => [
     allow.publicApiKey().to(['read']),
@@ -40,6 +37,7 @@ export const data = defineData({
   schema,
   authorizationModes: {
     defaultAuthorizationMode: 'apiKey',
+    apiKeyAuthorizationMode: { expiresInDays: 30 }
   },
 });
 
