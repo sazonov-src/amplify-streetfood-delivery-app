@@ -3,7 +3,10 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
 const schema = a.schema({
   Product: a.model({
-    title: a.string().required(),
+    title: a.string().required()
+      .authorization((allow) => [
+        allow.publicApiKey().to(['read']),
+      ]),
     image: a.url(),
     price: a.float(),
     cartItems: a.hasMany('CartItem', 'productId')
