@@ -3,14 +3,38 @@ import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
 const schema = a.schema({
   Product: a.model({
-    title: a.string().required(),
-    image: a.string(),
+    title: a.string().required()
+      .authorization((allow) => [
+        allow.publicApiKey().to(['read']),
+        allow.group('ADMINS')
+      ]),
+    image: a.url(),
     price: a.float(),
     cartItems: a.hasMany('CartItem', 'productId')
+      .authorization((allow) => [
+        allow.group('ADMINS')
+      ])
   })
   .authorization((allow) => [
-    allow.publicApiKey().to(['read']),
+    allow.group('ADMINS'),
+    allow.publicApiKey().to(['read'])
   ]),
+
+  // reateProduct: a
+  //   .mutation()
+  //   .arguments({
+  //     title: a.string().required(),
+  //     image: a.url().required(),
+  //     price: a.float().required(),
+  //   })
+  //   .returns(a.ref('Product'))
+  //   .authorization((allow) => [
+  //     allow.group('ADMINS')
+  //   ])
+  //   .handler(a.handler.custom({
+  //     dataSource: a.ref('Post'),
+  //     entry: './increment-like.js'
+  //   })),
 
   CartItem: a.model({
     product: a.belongsTo('Product', 'productId'),
