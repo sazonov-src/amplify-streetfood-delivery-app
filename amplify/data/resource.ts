@@ -20,39 +20,31 @@ const schema = a.schema({
     allow.publicApiKey().to(['read'])
   ]),
 
-  // reateProduct: a
-  //   .mutation()
-  //   .arguments({
-  //     title: a.string().required(),
-  //     image: a.url().required(),
-  //     price: a.float().required(),
-  //   })
-  //   .returns(a.ref('Product'))
-  //   .authorization((allow) => [
-  //     allow.group('ADMINS')
-  //   ])
-  //   .handler(a.handler.custom({
-  //     dataSource: a.ref('Post'),
-  //     entry: './increment-like.js'
-  //   })),
 
   CartItem: a.model({
     product: a.belongsTo('Product', 'productId'),
-    cart: a.belongsTo('Cart', 'cartId'),
     productId: a.id().required(),
-    cartId: a.id().required(),
     quantity: a.integer().default(1),
   })
   .authorization((allow) => [
     allow.owner()
-  ]),
+  ])
+  .identifier(['productId']),
 
-  Cart: a.model({
-    cartItems: a.hasMany('CartItem', 'cartId'),
-  })
-  .authorization((allow) => [
-    allow.owner()
-  ]),
+
+  reateCartItem: a
+    .mutation()
+    .arguments({
+      productId: a.string()
+    })
+    .returns(a.ref('CartItem'))
+    .authorization((allow) => [
+      allow.authenticated()
+    ])
+    .handler(a.handler.custom({
+      dataSource: a.ref('CartItem'),
+      entry: './add-to-cart.js'
+    })),
 });
 
 export type Schema = ClientSchema<typeof schema>;

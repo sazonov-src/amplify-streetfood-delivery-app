@@ -3,7 +3,7 @@ import { util } from '@aws-appsync/utils';
 export function request(ctx) {
   return {
     operation: 'UpdateItem',
-    key: util.dynamodb.toMapValues({ id: ctx.args.postId}),
+    key: util.dynamodb.({ id: ctx.args.postId}),
     update: {
       expression: 'ADD likes :plusOne',
       expressionValues: { ':plusOne': { N: 1 } },
