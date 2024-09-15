@@ -30,10 +30,10 @@ const schema = a.schema({
     allow.owner()
   ])
   .identifier(['productId'])
-  .disableOperations(['create', 'update']),
+  .disableOperations(['create', 'update', 'delete']),
 
 
-  reateCartItem: a
+  createCartItem: a
     .mutation()
     .arguments({
       productId: a.string()
