@@ -29,7 +29,8 @@ const schema = a.schema({
   .authorization((allow) => [
     allow.owner()
   ])
-  .identifier(['productId']),
+  .identifier(['productId'])
+  .disableOperations(['create', 'update']),
 
 
   reateCartItem: a

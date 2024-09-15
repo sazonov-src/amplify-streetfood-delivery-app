@@ -11,7 +11,3 @@ const backend = defineBackend({
   data,
   storage,
 });
-
-const dataResources = backend.data.resources;
-
-dataResources.cfnResources.cfnFunctions['']
